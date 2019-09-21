@@ -5,8 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
+
+import com.dungeon.game.graphics.Screen;//This imports the Screen.java
 
 public class Game extends Canvas implements Runnable{
 	private static final long serialVersionUID = 1L;
@@ -24,6 +28,21 @@ public class Game extends Canvas implements Runnable{
 	private Thread thread; //This is basically a process in a process
 	private JFrame frame;
 	private boolean running = false;
+	private Screen screen;
+	
+	//This creates an image object
+	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	
+	//raster is a datastructure that represents a rectangular array of pixels
+	//this is an arry of pixels
+	
+	/**
+	 * DataBufferInt - contact the image and get the image pixels an get the rasta
+	 * getRasta - return an array of pixels that we can write our color to
+	 * getDataBuffer - return the DataBuffer of the rasta
+	 * getData - this will convert it to data that will go into an array of integers(pixels)
+	 */
+	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	
 	/**
 	 * Creates the Game constructor
@@ -32,7 +51,10 @@ public class Game extends Canvas implements Runnable{
 		Dimension size = new Dimension(width * scale, height * scale);
 		setPreferredSize(size);
 		
+		screen = new Screen(width, height);//instantiated the new screen
+		
 		frame = new JFrame();
+		
 	}
 	/**
 	 * sychronized **
@@ -103,7 +125,7 @@ public class Game extends Canvas implements Runnable{
 		
 		//###################
 		g.dispose(); //this dispose of all the graphics
-		bs.show(); //this will makke the next available buffer visible
+		bs.show(); //this will make the next available buffer visible
 	}
 	public static void main(String[] args){
 		Game game = new Game();
